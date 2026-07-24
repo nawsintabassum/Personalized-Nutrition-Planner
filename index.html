@@ -1,0 +1,277 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Smart Nutrition & Exercise Planner</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <header class="top-header">
+    <div class="header-brand">
+      <span class="logo-icon">🥗</span>
+      <h1>NutriFit Dashboard</h1>
+    </div>
+    <div class="header-status">
+      <span class="status-badge">Professional Health Suite</span>
+    </div>
+  </header>
+
+  <div class="app-wrapper">
+    
+    <aside class="sidebar">
+      <nav class="sidebar-nav">
+        <ul>
+          <li class="active"><a href="#planner-section">📊 Calculator & Macros</a></li>
+          <li><a href="#diet-tips-section">🍎 Diet & Meal Timing</a></li>
+          <li><a href="#exercise-section">🏋️ Exercise & Workout Guide</a></li>
+        </ul>
+      </nav>
+    </aside>
+
+   
+    <main class="main-content">
+
+      
+      <section id="planner-section" class="content-section">
+        <header class="section-title">
+          <h2>Personalized Nutrition Planner</h2>
+          <p>Calculate your precise caloric intake, macronutrients, and targeted meal schedule.</p>
+        </header>
+
+        <div class="planner-layout">
+       
+          <div class="card input-card">
+            <div class="card-header">
+              <h3>Biometric Profile</h3>
+              <span class="step-indicator">Step 1</span>
+            </div>
+
+            <form id="nutrition-form">
+              <div class="form-group">
+                <label for="gender">Gender</label>
+                <select id="gender" required>
+                  <option value="male">Male</option>
+                  <option value="female">Female</option>
+                </select>
+              </div>
+              <div class="form-grid-3">
+                <div class="form-group">
+                  <label for="age">Age</label>
+                  <input type="number" id="age" min="15" max="100" placeholder="25" required>
+                </div>
+                <div class="form-group">
+                  <label for="weight">Weight (kg)</label>
+                  <input type="number" id="weight" min="30" max="250" step="0.1" placeholder="70" required>
+                </div>
+                <div class="form-group">
+                  <label for="height">Height (cm)</label>
+                  <input type="number" id="height" min="100" max="230" placeholder="175" required>
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="activity">Activity Level</label>
+                <select id="activity" required>
+                  <option value="1.2">Sedentary (Little/no exercise, desk job)</option>
+                  <option value="1.375">Lightly Active (Exercise 1-3 days/week)</option>
+                  <option value="1.55">Moderately Active (Exercise 3-5 days/week)</option>
+                  <option value="1.725">Very Active (Hard exercise 6-7 days/week)</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label for="goal">Primary Objective</label>
+                <select id="goal" required>
+                  <option value="maintain">Maintain Weight</option>
+                  <option value="lose">Weight Loss (Caloric Deficit)</option>
+                  <option value="gain">Weight / Muscle Gain (Caloric Surplus)</option>
+                </select>
+              </div>
+              <div class="button-group">
+                <button type="submit" class="btn btn-primary">Calculate Target</button>
+                <button type="button" id="reset-btn" class="btn btn-secondary">Reset</button>
+              </div>
+            </form>
+          </div>
+
+          
+          <div id="results" class="card results-card hidden">
+            <div class="card-header">
+              <h3>Target & Breakdown</h3>
+              <button id="print-btn" class="btn-icon">📄 Export Plan</button>
+            </div>
+
+            <div class="target-stat">
+              <p class="stat-label">Daily Energy Requirement</p>
+              <div class="stat-value">
+                <span id="total-calories">0</span>
+                <span class="unit">kcal/day</span>
+              </div>
+            </div>
+
+            
+            <div class="chart-container">
+              <canvas id="macroChart"></canvas>
+            </div>
+
+            
+            <div class="macro-grid">
+              <div class="macro-card protein-border">
+                <span class="macro-title">Protein</span>
+                <span class="macro-val" id="protein-val">0g</span>
+              </div>
+              <div class="macro-card carbs-border">
+                <span class="macro-title">Carbs</span>
+                <span class="macro-val" id="carbs-val">0g</span>
+              </div>
+              <div class="macro-card fat-border">
+                <span class="macro-title">Fats</span>
+                <span class="macro-val" id="fat-val">0g</span>
+              </div>
+            </div>
+ <div class="meal-schedule">
+              <h3>Meal Calorie Allocation</h3>
+              <div class="meal-list">
+                <div class="meal-item">
+                  <span>Breakfast (25%)</span>
+                  <span id="bfast-cal">0 kcal</span>
+                </div>
+                <div class="meal-item">
+                  <span>Lunch (35%)</span>
+                  <span id="lunch-cal">0 kcal</span>
+                </div>
+                <div class="meal-item">
+                  <span>Dinner (30%)</span>
+                  <span id="dinner-cal">0 kcal</span>
+                </div>
+                <div class="meal-item">
+                  <span>Snacks (10%)</span>
+                  <span id="snack-cal">0 kcal</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+            
+      <section id="diet-tips-section" class="content-section">
+        <header class="section-title">
+          <h2>Dietary Guidelines & Meal Schedule</h2>
+          <p>Specific dietary recommendations depending on whether your goal is gaining healthy weight or shedding body fat.</p>
+        </header>
+
+        <div class="dual-cards-grid">
+          
+          <div class="card guide-card loss-theme">
+            <div class="guide-badge">Weight Loss Plan</div>
+            <h3>How to Lose Fat Effectively</h3>
+            <p class="guide-intro">Focus on a controlled caloric deficit with high satiety foods.</p>
+            
+            <h4>⏰ Recommended Meal Timing</h4>
+            <ul class="timeline-list">
+              <li><strong>07:30 AM - Breakfast:</strong> High-protein meal (Eggs, Oats, Black Coffee) to keep you full.</li>
+              <li><strong>01:00 PM - Lunch:</strong> Lean protein (Chicken/Fish) + large bowl of green salad + minimal complex carbs (Brown rice/Quinoa).</li>
+              <li><strong>05:00 PM - Evening Snack:</strong> Green tea with a handful of almonds or cucumber slices.</li>
+              <li><strong>08:00 PM - Dinner:</strong> Light meal eaten at least 2 hours before sleeping. Avoid heavy carbs at night.</li>
+            </ul>
+            <h4>💡 Key Rules</h4>
+            <ul class="check-list">
+              <li>Drink at least 3-4 liters of water daily.</li>
+              <li>Completely eliminate refined sugar, fast food, and sodas.</li>
+              <li>Prioritize fiber and protein to preserve muscle mass during fat loss.</li>
+            </ul>
+          </div>
+
+          
+          <div class="card guide-card gain-theme">
+            <div class="guide-badge">Weight Gain Plan</div>
+            <h3>How to Build Healthy Weight & Muscle</h3>
+            <p class="guide-intro">Focus on nutrient-dense calorie surplus without eating empty junk calories.</p>
+
+            <h4>⏰ Recommended Meal Timing</h4>
+            <ul class="timeline-list">
+              <li><strong>08:00 AM - Breakfast:</strong> Whole eggs, whole-wheat toast, peanut butter, and fruit smoothies.</li>
+              <li><strong>11:00 AM - Mid-Morning Snack:</strong> Handful of mixed nuts (Walnuts, Cashews, Raisins) or a banana shake.</li>
+              <li><strong>01:30 PM - Lunch:</strong> Generous portions of Rice/Pasta, Lean Meat, Milk, and Cooked Vegetables in Olive Oil.</li>
+              <li><strong>05:30 PM - Pre-Workout Snack:</strong> Peanut butter sandwich or boiled potatoes.</li>
+              <li><strong>08:30 PM - Dinner:</strong> Dense protein meal with healthy fats (Salmon, Cottage cheese, Whole Grains).</li>
+            </ul>
+            
+
+            
+            <h4>💡 Key Rules</h4>
+            <ul class="check-list">
+              <li>Eat frequently (5-6 smaller nutrient-dense meals a day).</li>
+              <li>Drink liquid calories like homemade protein smoothies with milk, bananas, and oats.</li>
+              <li>Ensure 7-8 hours of quality sleep for muscle recovery and growth.</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      
+      <section id="exercise-section" class="content-section">
+        <header class="section-title">
+          <h2>Exercise & Training Guidelines</h2>
+          <p>Pairing your diet with the correct training program ensures optimal body composition results.</p>
+        </header>
+
+        <div class="dual-cards-grid">
+          
+          <div class="card workout-card">
+            <h3>🏋️ Training for Weight / Fat Loss</h3>
+            <p>Combine cardiovascular conditioning with resistance training to maximize calorie burn and preserve lean muscle.</p>
+            <div class="workout-routine">
+              <div class="routine-item">
+                <span class="routine-title">Cardio & HIIT (3x / week)</span>
+                <p>20-30 minutes of High-Intensity Interval Training (Brisk walking, Jump rope, Cycling, or Treadmill sprints).</p>
+              </div>
+              <div class="routine-item">
+                <span class="routine-title">Full Body Strength Training (3x / week)</span>
+                <p>Squats, Push-ups, Dumbbell Presses, and Planks. Lifting weights prevents muscle loss while losing weight.</p>
+              </div>
+              <div class="routine-item">
+                <span class="routine-title">Daily Steps Goal</span>
+                <p>Aim for 8,000 to 10,000 steps daily to increase Non-Exercise Activity Thermogenesis (NEAT).</p>
+              </div>
+            </div>
+          </div>
+
+          
+          <div class="card workout-card">
+            <h3>💪 Training for Muscle & Weight Gain</h3>
+            <p>Focus strictly on progressive overload resistance training to convert surplus calories into lean muscle rather than fat.</p>
+            <div class="workout-routine">
+              <div class="routine-item">
+                <span class="routine-title">Progressive Resistance Training (4-5x / week)</span>
+                <p>Focus on heavy compound movements: Barbell Squats, Deadlifts, Bench Press, Overhead Press, and Pull-ups.</p>
+              </div>
+              <div class="routine-item">
+                <span class="routine-title">Minimize Excessive Cardio</span>
+                <p>Keep cardio light (10-15 minutes warm-up) so you do not burn off the excess calories needed for building weight.</p>
+              </div>
+              <div class="routine-item">
+                <span class="routine-title">Rest & Recovery</span>
+                <p>Muscle grows during rest, not during workouts. Allow 48 hours of rest before retraining the same muscle group.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
+
+
+
+
